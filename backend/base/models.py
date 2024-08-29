@@ -5,6 +5,7 @@ from django.utils import timezone
 class Customer(models.Model):
     customer_id = models.IntegerField(primary_key=True, max_length=50)
     username = models.CharField(max_length=50)
+    password = models.CharField(max_length=128)
     address = models.CharField(max_length=50)
     telNum = models.IntegerField(max_length=10)
     fields =['id','username', 'address', 'telNum']

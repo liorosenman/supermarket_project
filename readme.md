@@ -28,5 +28,18 @@ Error message if needed.
 Client is directed to "Start a new shopping" page.
 
 ## Register:
-Register with username, password and email.
+Register with username, password, address, telNum.
 Proper message, the user stays in the page.
+
+## Shop:
+
+### Nav-bar with categories
+### Rows of products, each vertically including:
+1. Product name
+2. Category Id
+3. Price for a unit
+4. ADD button: 
+
+    #### If new in cart, add in cart
+    #### If existing in cart, then +1
+
