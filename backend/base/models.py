@@ -8,7 +8,6 @@ class Customer(models.Model):
     password = models.CharField(max_length=128)
     address = models.CharField(max_length=50)
     telNum = models.CharField(max_length=15)
-    # is_admin = models.BooleanField()
  
     def __str__(self):
            return self.username
