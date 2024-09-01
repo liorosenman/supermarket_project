@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from flask import Response
-from .models import Cart, Category, Customer, OrderDetail, Product
+from .models import Category, Customer, Order, OrderDetail, Product
 from rest_framework.decorators import api_view, permission_classes
-from .serializers import CartSerializer, CategorySerializer, CustomerSerializer, OrderDetailSerializer, ProductSerializer
+from .serializers import CategorySerializer, CustomerSerializer, OrderDetailSerializer, OrderSerializer, ProductSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
+from django.contrib.auth.models import User
 
 
 def index(req):
@@ -25,9 +26,9 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-class CartViewSet(viewsets.ModelViewSet):
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
 
 class OrderDetailViewSet(viewsets.ModelViewSet):
     queryset = OrderDetail.objects.all()
@@ -37,11 +38,13 @@ class OrderDetailViewSet(viewsets.ModelViewSet):
 
 @api_view(['POST'])
 def register(request):
+    user = User.objects.create(username=request.data['username'])
+    user.set_password(request.data['password'])
+    user.save()
     customer = Customer.objects.create(
-                username=request.data['username'],
-                password=request.data['password'],
+                user = user,
                 address=request.data['address'],
-                telNum=request.data['telNum']
+                phone=request.data['phone']
             )
     customer.save()
     return JsonResponse({"msg":"New customer created"})
@@ -63,8 +66,19 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 @api_view(['DELETE'])
 def del_customer(request):
-        admin_users = Customer.objects.filter(customer_id=9)
+        admin_users = Customer.objects.filter(customer_id=10)
         admin_users.delete()
         return JsonResponse({"msg": "Admin users deleted successfully"})
+
+@api_view(['POST'])
+def create_user(request):
+    user = User.objects.create_user(username='lioros', password='zaza123')
+    user.save()
+    return JsonResponse({"msg":"User created successfully"})
+
+@api_view(['POST'])
+def mashoo(request):
+    pass
+
 
 
